@@ -58,22 +58,21 @@
                 // this function will get called when the calc button gets clicked
                 function onCalc() {
                         // retrieve values from the input boxes and store in variables
-                        var height_text = document.getElementById("height").value;
-                        var height = new Number(height_text);
+                        //var height_text = document.getElementById("height").value; //why is this in 2 separate lines
+                        //var height = new Number(height_text); 
+                        var height = document.getElementById("height").value;
                         var length_text = document.getElementById("length").value;
                         if (length_text == "")
                                 length = autoCalcLength(height);
                         else
                                 length = new Number(length_text);
 
-
+                        var width = document.getElementById("width").value;
                         drawPic(height, length);
-                        showTextResults(height, length);
+                        showTextResults(height, length, width);
                 }
-                    //drawPic(height, length);
-                    //showTextResults(height, length);
+
                 function autoCalcLength(height) {
-                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
                         return height * 1.5; // general ratio from Home Depot; could be refined later
                 }
 
@@ -83,7 +82,6 @@
                         kmgHelper.clearGraph();
 
 
-                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
                         var nSteps = Math.round((height/7));
                         var x = 0;
                         var y = 0;
@@ -113,18 +111,21 @@
                 }
 
 
-                function showTextResults(height, length) {
-                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
+                function showTextResults(height, length, width) {
                         var numSteps = Math.round((height/7));
                         var riserHeight = height/numSteps;
                         var treadDepth = length/numSteps;
+                        var numStringers = Math.trunc(width/18) + 2;
 
 
                         var tr ="stairs height: " + height + "\r\n" +
                                 "stairs length: " + length + "\r\n" +
+                                "stairs width:  " + width + "\r\n" +
                                 "number steps:  " + numSteps + "\r\n" +
                                 "riser height:  " + riserHeight + "\r\n" +
-                                "tread depth:   " + treadDepth + "\r\n" +
+                                "tread depth:   " + treadDepth + "\r\n" + 
+                                "# of stringers:" + numStringers + "\r\n" +
+                                "distance between stringers:" + width/(numStringers-1) + "\r\n" + 
                                 'this is showTextResults\n';
                         document.getElementById("text_results").value = tr;
                 }
@@ -142,6 +143,9 @@
         <br>
         horizontal length of stairs (inches, leave blank to automatically calculate)<br>
         <input id="length" value="" size="4" /><br>
+        <br>
+        width of stairs (inches)<br>
+        <input id="width" value="" size="4" /><br>
         <br>
         <button onclick="onCalc()">calculate</button>
         <br>

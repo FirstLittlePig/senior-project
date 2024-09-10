@@ -188,7 +188,7 @@ Person.prototype.getFullName = function() {
 }*/
 
 //Class; looks way simpler
-/*lass Person {
+/*Class Person {
     constructor(firstName, lastName, dob) {
         this.firstName = firstName;
         this.lastName = lastName;
