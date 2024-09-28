@@ -58,8 +58,6 @@
                 // this function will get called when the calc button gets clicked
                 function onCalc() {
                         // retrieve values from the input boxes and store in variables
-                        //var height_text = document.getElementById("height").value; //why is this in 2 separate lines
-                        //var height = new Number(height_text); 
                         var height = document.getElementById("height").value;
                         var length_text = document.getElementById("length").value;
                         if (length_text == "")
@@ -71,6 +69,7 @@
                         drawPic(height, length);
                         showTextResults(height, length, width);
                 }
+
 
                 function autoCalcLength(height) {
                         return height * 1.5; // general ratio from Home Depot; could be refined later
@@ -117,17 +116,37 @@
                         var treadDepth = length/numSteps;
                         var numStringers = Math.trunc(width/18) + 2;
 
-
-                        var tr ="stairs height: " + height + "\r\n" +
-                                "stairs length: " + length + "\r\n" +
-                                "stairs width:  " + width + "\r\n" +
-                                "number steps:  " + numSteps + "\r\n" +
-                                "riser height:  " + riserHeight + "\r\n" +
-                                "tread depth:   " + treadDepth + "\r\n" + 
-                                "# of stringers:" + numStringers + "\r\n" +
-                                "distance between stringers:" + width/(numStringers-1) + "\r\n" + 
-                                'this is showTextResults\n';
+                        var tr ="stairs height:  " + height + "\n" +
+                                "stairs length:  " + length + "\n" +
+                                "stairs width:   " + width + "\n" +
+                                "number steps:   " + numSteps + "\n" +
+                                "riser height:   " + riserHeight + "\n" +
+                                "tread depth:    " + treadDepth + "\n" + 
+                                "# of stringers: " + numStringers + "\n" +
+                                "distance between stringers: " + width/(numStringers-1) + "\n";
                         document.getElementById("text_results").value = tr;
+
+                        checkValues(riserHeight, treadDepth, height, width, numSteps, tr);
+                }
+
+
+                function checkValues(riserHeigth, treadDepth, height, width, numSteps, text) {
+                        if (riserHeigth > 7.75 || riserHeigth < 4) {
+                                alert('Risers must be 4 to 7.5 inches in height.');
+                        }
+
+                        if (treadDepth < 10) {
+                                alert('The minimum tread depth for stairs is 10 inches. For stairs ' + height + ' inches tall, your stairs need to be at least ' + numSteps*10 + ' inches long');
+                        }
+
+                        if (height > 144) {
+                                alert('A flight of stairs should have a vertical rise of 12 feet max. (144 inches)');
+                        }
+
+                        if (width < 36 && width != 0) {
+                                alert('The minimum width of stairs is 36 inches');
+                        }
+
                 }
         </script>
 </head>
@@ -157,7 +176,7 @@
         <canvas id="graph" width="400" height="300" style="border-style:solid;border-width:1px"></canvas>
 
 
-        <textarea id="text_results" rows="10" cols="60"></textarea>
+        <textarea id="text_results" rows="10" cols="60" font="strong"></textarea>
 
 
 </body>
