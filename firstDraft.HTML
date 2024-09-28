@@ -79,13 +79,14 @@
                 function drawPic(height, length) {
                         let kmgHelper = new kmGraphHelper("graph");// variable kmgHelper needed to be declared
                         kmgHelper.clearGraph();
-
-
                         var nSteps = Math.round((height/7));
+                        document.getElementById("graph").height = height + 10; //next: scale stairs instead of box
+
+                        
                         var x = 0;
-                        var y = 0;
-                        var riser = 7;
-                        var tread = 10;
+                        var y = 10;
+                        var riser = height/nSteps;
+                        var tread = length/nSteps;
 
 
                         var red = "#ff0000";
@@ -107,6 +108,7 @@
                                 x = x1;
                                 y = y1;
                         }
+                        //document.getElementById('graph').width = x;
                 }
 
 
@@ -115,6 +117,12 @@
                         var riserHeight = height/numSteps;
                         var treadDepth = length/numSteps;
                         var numStringers = Math.trunc(width/18) + 2;
+                        var stringerDistance = width/(numStringers-1);
+                        var alertText = "";
+                        if(width = '0') {
+                                numStringers = "N/A"
+                                stringerDistance = "N/A"
+                        }
 
                         var tr ="stairs height:  " + height + "\n" +
                                 "stairs length:  " + length + "\n" +
@@ -123,29 +131,37 @@
                                 "riser height:   " + riserHeight + "\n" +
                                 "tread depth:    " + treadDepth + "\n" + 
                                 "# of stringers: " + numStringers + "\n" +
-                                "distance between stringers: " + width/(numStringers-1) + "\n";
+                                "distance between stringers: " + stringerDistance + "\n";
                         document.getElementById("text_results").value = tr;
-
-                        checkValues(riserHeight, treadDepth, height, width, numSteps, tr);
+                        //document.getElementById("code_warning").innerHTML = "BLAH";
+                        
+                        checkValues(riserHeight, treadDepth, height, width, numSteps, alertText);
+                        //alert(alertText);
+                        //document.getElementById("graph").width = 4000;
                 }
 
 
-                function checkValues(riserHeigth, treadDepth, height, width, numSteps, text) {
+                function checkValues(riserHeigth, treadDepth, height, width, numSteps, alertText) {
                         if (riserHeigth > 7.75 || riserHeigth < 4) {
-                                alert('Risers must be 4 to 7.5 inches in height.');
+                                alertText += 'Risers must be 4 to 7.5 inches in height. ';
                         }
 
                         if (treadDepth < 10) {
-                                alert('The minimum tread depth for stairs is 10 inches. For stairs ' + height + ' inches tall, your stairs need to be at least ' + numSteps*10 + ' inches long');
+                                alertText += 'The minimum tread depth for stairs is 10 inches. For stairs ' + height + ' inches tall, your stairs need to be at least ' + numSteps*10 + ' inches long. ';
                         }
 
                         if (height > 144) {
-                                alert('A flight of stairs should have a vertical rise of 12 feet max. (144 inches)');
+                                alertText += 'A flight of stairs should have a vertical rise of 12 feet  (144 inches) max. ';
                         }
 
                         if (width < 36 && width != 0) {
-                                alert('The minimum width of stairs is 36 inches');
+                                alertText += 'The minimum width of stairs is 36 inches';
                         }
+                        if (alertText != '') {
+                                alertText = 'Invalid inputs: ' + alertText
+                                alert(alertText);
+                        }
+                        document.getElementById("code_warning").innerHTML = alertText;
 
                 }
         </script>
@@ -173,9 +189,9 @@
 
 
 
-        <canvas id="graph" width="400" height="300" style="border-style:solid;border-width:1px"></canvas>
+        <canvas id="graph" width="450" height="298" style="border-style:solid;border-width:1px"></canvas>
 
-
+        <div id="code_warning" style="font-weight:bold; color: crimson;"></div>
         <textarea id="text_results" rows="10" cols="60" font="strong"></textarea>
 
 
