@@ -14,15 +14,18 @@
                                 this.id = id;
                                 this.canvas = document.getElementById(id);
                                 this.canvasContext = this.canvas.getContext("2d");
+                                this.getHeight = document.getElementById(id).height;
+                                this.graphWidth = document.getElementById(id).width;
+                                //console.log(this.getHeight + " " + this.graphWidth)
 
 
 
 
                                 // method: SetPixel
                                 // Draws a rect with width and height of 1 in specified color
-                                this.setPixel = function (x, y, color) {
+                                this.drawRect = function (x, y, w, h, color) {
                                         this.canvasContext.fillStyle = color;
-                                        this.canvasContext.fillRect(x, y, 1, 1);
+                                        this.canvasContext.fillRect(x, y, w, h);
                                 };
 
 
@@ -79,8 +82,9 @@
                 function drawPic(height, length) {
                         let kmgHelper = new kmGraphHelper("graph");// variable kmgHelper needed to be declared
                         kmgHelper.clearGraph();
+                        document.getElementById("graph").height = 318;
                         var nSteps = Math.round((height/7));
-                        document.getElementById("graph").height = height + 10; //next: scale stairs instead of box
+                        //document.getElementById("graph").height = height + 10; //bug, keeping this here so I remember it
 
                         
                         var x = 0;
@@ -89,25 +93,38 @@
                         var tread = length/nSteps;
 
 
-                        var red = "#ff0000";
-                        var blue = "#0000ff";
-                        var scale = 2.0;
+                        //var red = "#ff0000";
+                        //var blue = "#0000ff";
+                        //nSteps*riser
+                        var scale = kmgHelper.getHeight/(height);//35*(1/nSteps)
+                        if(length*scale>kmgHelper.graphWidth || length*scale<kmgHelper.graphWidth) {
+                                scale = 450/(length);
+                                if(height*scale<250) {
+                                        document.getElementById("graph").height = height * scale + 15;
+                                }
+                                if(height*scale>318) {
+                                        scale=kmgHelper.getHeight/(height*1+1);
+                                }
+                        }
 
 
 
 
                         for (var step = 0; step < nSteps; step++) {
                                 var x1 = x + tread * scale;
-                                kmgHelper.drawLine(x, y, x1, y, red);
+                                kmgHelper.drawLine(x, y, x1, y, "red");
 
 
                                 var y1 = y + riser * scale;
-                                kmgHelper.drawLine(x1, y, x1, y1, blue);
+                                kmgHelper.drawLine(x1, y, x1, y1, "blue");
 
 
                                 x = x1;
                                 y = y1;
                         }
+                        
+                        kmgHelper.drawRect(0, y, kmgHelper.graphWidth, kmgHelper.getHeight-y, "#C4A484");//light brown
+                        //kmgHelper.drawLine(0, y, kmgHelper.graphWidth, y, blue);
                         //document.getElementById('graph').width = x;
                 }
 
@@ -189,10 +206,11 @@
 
 
 
-        <canvas id="graph" width="450" height="298" style="border-style:solid;border-width:1px"></canvas>
+        <canvas id="graph" width="465" height="318" style="border-style:solid;border-width:1px"></canvas>
 
         <div id="code_warning" style="font-weight:bold; color: crimson;"></div>
         <textarea id="text_results" rows="10" cols="60" font="strong"></textarea>
+        <p>For more specific building requirements, please refer to <a href="https://codes.iccsafe.org/content/IBC2021P2/chapter-10-means-of-egress#IBC2021P2_Ch10_Sec1011">International Building Code</a> (section 1011)</p>
 
 
 </body>
