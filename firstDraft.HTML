@@ -5,6 +5,12 @@
 <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">      
         <title>test project</title>
+        <style>
+                #text_results {
+                        white-space: pre-wrap;
+                        padding-bottom: 162px; /*creates spacing before results are output*/
+                }
+        </style>
         <script type="text/javascript">
                 "use strict";
 
@@ -135,23 +141,26 @@
                         var treadDepth = length/numSteps;
                         var numStringers = Math.trunc(width/18) + 2;
                         var stringerDistance = width/(numStringers-1);
+                        var stringerLength = Math.sqrt(height**2 + length**2);
                         var alertText = "";
-                        if(width = '0') {
+                        if(width == '') {
+                                width = "N/A"
                                 numStringers = "N/A"
                                 stringerDistance = "N/A"
                         }
 
-                        var tr ="stairs height:  " + height + "\n" +
-                                "stairs length:  " + length + "\n" +
-                                "stairs width:   " + width + "\n" +
-                                "number steps:   " + numSteps + "\n" +
-                                "riser height:   " + riserHeight + "\n" +
-                                "tread depth:    " + treadDepth + "\n" + 
-                                "# of stringers: " + numStringers + "\n" +
-                                "distance between stringers: " + stringerDistance + "\n";
-                        document.getElementById("text_results").value = tr;
-                        //document.getElementById("code_warning").innerHTML = "BLAH";
-                        
+                        var tr ="stairs height:  " + height +
+                                "\nstairs length:  " + length +
+                                "\ndistance between stringers: " + stringerDistance +
+                                "\nnumber steps:   " + numSteps +
+                                "\nriser height:   " + riserHeight +
+                                "\ntread depth:    " + treadDepth + 
+                                "\nstringer length " + stringerLength +
+                                "\nstairs width:   " + width +
+                                "\n# of stringers: " + numStringers;
+                        document.getElementById("text_results").innerHTML = "Results:\n" + tr;
+                        document.getElementById("text_results").style.paddingBottom = "0px";
+                        //document.getElementById("code_warning").innerHTML = "BLAH"; //one option for putting text in div
                         checkValues(riserHeight, treadDepth, height, width, numSteps, alertText);
                         //alert(alertText);
                         //document.getElementById("graph").width = 4000;
@@ -209,7 +218,8 @@
         <canvas id="graph" width="465" height="318" style="border-style:solid;border-width:1px"></canvas>
 
         <div id="code_warning" style="font-weight:bold; color: crimson;"></div>
-        <textarea id="text_results" rows="10" cols="60" font="strong"></textarea>
+        <div id="text_results">Results</div>
+        <!-- <textarea id="text_results" rows="10" cols="60" font="strong"></textarea> -->
         <p>For more specific building requirements, please refer to <a href="https://codes.iccsafe.org/content/IBC2021P2/chapter-10-means-of-egress#IBC2021P2_Ch10_Sec1011">International Building Code</a> (section 1011)</p>
 
 
