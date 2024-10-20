@@ -14,6 +14,8 @@
         <script type="text/javascript">
                 "use strict";
 
+                /*alert("Please enter a valid input"); //alert the user of an improper input
+                throw "error : nonono"; //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)*/
 
                 class kmGraphHelper {
                         constructor(id) {
@@ -56,7 +58,7 @@
                                 // erases the graph
                                 this.clearGraph = function () {
                                         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                                      };
+                                };
 
 
                                 return this;
@@ -72,15 +74,18 @@
                         var length_text = document.getElementById("length").value;
                         var numberOfSteps = Math.round((height/7));
                         //console.log("length_text |" + length_text + "|");
-                        //console.log("something")
+                        console.log("something")
                         if (!length_text) { //if length_text doesn't have a value
-                                /*alert("Please enter a valid input"); //alert the user of an improper input
-                                throw "error : nonono"; //stops the code, puts wierd errors in the console, but idk what that is*/
                                 length = autoCalcLength(height, numberOfSteps);
+                                console.log("before error");
+                                alert("Please enter a valid input"); //alert the user of an improper input
+                                throw new Error("error : nonono"); //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)
+                                console.log("after error");
                         }
                         else
                                 length = new Number(length_text);
 
+                        console.log("after statements");
                         var width = document.getElementById("width").value;
                         drawPic(height, length, numberOfSteps);
                         showTextResults(height, length, width, numberOfSteps);
