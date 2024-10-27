@@ -14,8 +14,17 @@
         <script type="text/javascript">
                 "use strict";
 
-                /*alert("Please enter a valid input"); //alert the user of an improper input
-                throw "error : nonono"; //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)*/
+                //error code
+                /*//console.log("before error");
+                //document.getElementById("text_results").innerHTML = "NOOOOOOOOOOOOO";
+                alert("Please enter a valid input"); //alert the user of an improper input
+                throw new Error("error : nonono"); //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)
+                //console.log("after error");*/
+                //const niceFractions = [0, 1/32, 1/16, 3/32, 1/8, 5/32, 3/16, 7/32, 1/4, 9/32, 5/16, 11/32, 3/8, 13/32, 7/16, 15/32, 1/2, 17/32, 9/16, 19/32, 5/8, 21/32, 11/16, 23/32, 3/4, 25/32, 13/16, 27/32, 7/8, 29/32, 15/16, 31/32, 1];
+                const fractionStrings = ["0", "1/32", "1/16", "3/32", "1/8", '5/32', '3/16', '7/32', '1/4', '9/32', '5/16', '11/32', '3/8', '13/32', '7/16', '15/32', '1/2', '17/32', '9/16', '19/32', '5/8', '21/32', '11/16', '23/32', '3/4', '25/32', '13/16', '27/32', '7/8', '29/32', '15/16', '31/32', '1'];
+                const niceFractions = [0, 0.03125, 0.0625, 0.09375, 0.125, 0.15625, 0.1875, 0.21875, 0.25, 0.28125, 0.3125, 0.34375, 0.375, 0.40625, 0.4375, 0.46875, 0.5, 0.53125, 0.5625, 0.59375, 0.625, 0.65625, 0.6875, 0.71875, 0.75, 0.78125, 0.8125, 0.84375, 0.875, 0.90625, 0.9375, 0.96875, 1];
+
+                //const decimalValues = [];
 
                 class kmGraphHelper {
                         constructor(id) {
@@ -70,36 +79,67 @@
                 function onCalc() {
                         //window.stop();
                         // retrieve values from the input boxes and store in variables
+
                         var height = document.getElementById("height").value;
                         var length_text = document.getElementById("length").value;
-                        var numberOfSteps = Math.round((height/7));
-                        //console.log("length_text |" + length_text + "|");
-                        console.log("something")
+                        var numberOfSteps = Math.ceil(height/7);
+
                         if (!length_text) { //if length_text doesn't have a value
                                 length = autoCalcLength(height, numberOfSteps);
-                                console.log("before error");
-                                alert("Please enter a valid input"); //alert the user of an improper input
-                                throw new Error("error : nonono"); //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)
-                                console.log("after error");
                         }
-                        else
+                        else {
                                 length = new Number(length_text);
-
-                        console.log("after statements");
+                        }
                         var width = document.getElementById("width").value;
+                        
+                        /*let testNumSteps = 1;
+                        for (let testHeight = 4; testHeight < 144; testHeight++) {
+                                testNumSteps = Math.ceil(testHeight/7);
+                                //console.log("\nTESTING HEIGHT = |" + testHeight + "|    NUMBER OF STEPS |" + testNumSteps + "|");
+                                tester(testHeight, length, width, testNumSteps);
+                        }*/
+
                         drawPic(height, length, numberOfSteps);
                         showTextResults(height, length, width, numberOfSteps);
                 }
 
+                
+                function checkValues(riserHeigth, treadDepth, height, width, numSteps, alertText) {
+                        if (riserHeigth > 7.75 || riserHeigth < 4) {
+                                alertText += 'Risers must be 4 to 7.5 inches in height. ';
+                        }
 
-                function autoCalcLength(height, nSteps) {
-                        var autoLength = height * 1.5 // general ratio from Home Depot; could be refined later
-                        
-                        if ((autoLength/nSteps)<10) { 
-                                return nSteps*10;
-                                }
-                        return autoLength;
+                        if (treadDepth < 10) {
+                                alertText += 'The minimum tread depth for stairs is 10 inches. A flight of stairs with ' + numSteps + ' steps needs to be at least ' + numSteps*10 + ' inches long. ';
+                        }
+
+                        if (height > 144) {
+                                alertText += 'A single flight of stairs should have a vertical rise of 12 feet  (144 inches) max. ';
+                        }
+
+                        if (width < 36 && width != 0) {
+                                alertText += 'The minimum width of stairs is 36 inches';
+                        }
+                        if (alertText != '') {
+                                alertText = 'Invalid inputs: ' + alertText
+                                alert(alertText);
+                        }
+                        document.getElementById("code_warning").innerHTML = alertText;
+
                 }
+
+                /*function checkHeight() {
+
+                }
+
+                function checkLength() {
+
+                }
+                
+                function checkWidth() {
+
+                }*/
+
 
 
                 function drawPic(height, length, nSteps) {
@@ -107,17 +147,12 @@
                         document.getElementById("graph").height = 318;
                         //document.getElementById("graph").height = height + 10; //bug, keeping this here so I remember it
 
-                        
                         var x = 0;
                         var y = 10;
                         var riser = height/nSteps;
                         var tread = length/nSteps;
-                        /*if (tread < 10) {
-                                tread = 10;
-                        }*/
+                        /*if (tread < 10) { tread = 10; }*/
 
-                        //var red = "#ff0000";
-                        //var blue = "#0000ff";
                         //nSteps*riser
                         var scale = kmgHelper.getHeight/(height);//35*(1/nSteps)
                         /*if (kmgHelper.getWidth/length > kmgHelper.getHeight/height) {
@@ -160,6 +195,48 @@
                         //document.getElementById('graph').width = x;
                 }
 
+                function autoCalcLength(height, nSteps) {
+                        var autoLength = nSteps * 11 // 10 is the minimum for steps
+                        /*if ((autoLength/nSteps)<10) { 
+                                return nSteps*10;
+                                }*/
+                        return autoLength;
+                }
+
+
+                
+                function tester(totHeight, totLength, totWidth, numSteps) {
+                        const rRiserHeight = totHeight/numSteps;
+                        const rRiserFraction = rRiserHeight % 1;
+                        //console.log("raw riser height " + rRiserHeight);
+                        if(rRiserHeight>7) {
+                                console.log("riser height is too big: " + rRiserHeight)
+                        }
+                        const niceFraction = findClosestNiceFraction(rRiserFraction);
+                        const difference = rRiserFraction-niceFraction;
+                        const totDifference = difference*numSteps;
+                        //console.log("The difference between raw fraction and estimation: " + totDifference);
+                        if(totDifference<-3/8) {
+                                console.log("Difference is too big: " + totDifference);
+                        }
+                }
+
+                //finds the closest fraction on a ruler down to the 32nds 
+                function findClosestNiceFraction(badFraction) {
+                        let temp = 1;
+                        //console.log("raw fraction is " + badFraction);
+
+                        for(let i = 0; i < niceFractions.length; i++) {
+                                //console.log("    checking " + niceFractions[i]);
+                                if(Math.abs(badFraction-niceFractions[i]) < temp) {
+                                        temp=Math.abs(badFraction-niceFractions[i]);
+                                }
+                                else {
+                                        //console.log("the closest one is " + niceFractions[i-1]);
+                                        return niceFractions[i-1];
+                                }
+                        }
+                }
 
                 function showTextResults(height, length, width, numSteps) {
                         var riserHeight = height/numSteps;
@@ -167,6 +244,21 @@
                         var numStringers = Math.trunc(width/18) + 2;
                         var stringerDistance = width/(numStringers-1);
                         var stringerLength = Math.sqrt(height**2 + length**2);
+                        const integerRiserHeight = Math.floor(riserHeight);
+                        const rRiserFraction = riserHeight % 1;
+                        const niceFraction = findClosestNiceFraction(rRiserFraction);
+                        const difference = rRiserFraction-niceFraction;
+                        const totDifference = Math.trunc((difference*numSteps)*10000000000)/10000000000;
+                        const totDifFraction = fractionStrings[niceFractions.indexOf(Math.abs(totDifference))];
+                        const fraction = fractionStrings[niceFractions.indexOf(niceFraction)];
+
+                        console.log("int rh: " + integerRiserHeight)
+                        console.log("riser fraction: " + rRiserFraction)
+                        console.log("niceFraction: " + niceFraction)
+                        console.log("difference: " + difference)
+                        console.log("totDifference: " + totDifference)
+                        console.log("totDif Fraction: " + totDifFraction)
+                        console.log(integerRiserHeight + " " + fraction)
                         var alertText = "";
                         if(width == '') {
                                 width = "N/A"
@@ -178,7 +270,8 @@
                                 "\nstairs length:  " + length +
                                 "\ndistance between stringers: " + stringerDistance +
                                 "\nnumber steps:   " + numSteps +
-                                "\nriser height:   " + riserHeight +
+                                //"\nriser height:   " + riserHeight +
+                                "\nriser height:   " + integerRiserHeight + "\' " + fraction + "\"" +
                                 "\ntread depth:    " + treadDepth + 
                                 "\nstringer length " + stringerLength +
                                 "\nstairs width:   " + width +
@@ -191,30 +284,6 @@
                         //document.getElementById("graph").width = 4000;
                 }
 
-
-                function checkValues(riserHeigth, treadDepth, height, width, numSteps, alertText) {
-                        if (riserHeigth > 7.75 || riserHeigth < 4) {
-                                alertText += 'Risers must be 4 to 7.5 inches in height. ';
-                        }
-
-                        if (treadDepth < 10) {
-                                alertText += 'The minimum tread depth for stairs is 10 inches. A flight of stairs with ' + numSteps + ' steps needs to be at least ' + numSteps*10 + ' inches long. ';
-                        }
-
-                        if (height > 144) {
-                                alertText += 'A single flight of stairs should have a vertical rise of 12 feet  (144 inches) max. ';
-                        }
-
-                        if (width < 36 && width != 0) {
-                                alertText += 'The minimum width of stairs is 36 inches';
-                        }
-                        if (alertText != '') {
-                                alertText = 'Invalid inputs: ' + alertText
-                                alert(alertText);
-                        }
-                        document.getElementById("code_warning").innerHTML = alertText;
-
-                }
         </script>
 </head>
 
