@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">       
+        <title>test project</title>
+        <script type="text/javascript">
+                "use strict";
+
+                class kmGraphHelper {
+                        constructor(id) {
+                                this.id = id;
+                                this.canvas = document.getElementById(id);
+                                this.canvasContext = this.canvas.getContext("2d");
+
+
+                                // method: SetPixel
+                                // Draws a rect with width and height of 1 in specified color
+                                this.setPixel = function (x, y, color) {
+                                        this.canvasContext.fillStyle = color;
+                                        this.canvasContext.fillRect(x, y, 1, 1);
+                                };
+
+
+                                // method: DrawLine
+                                // draws a line from x1, y1 to x2, y2 in the specified color
+                                this.drawLine = function (x1, y1, x2, y2, color) {
+                                        this.canvasContext.beginPath();
+                                        this.canvasContext.moveTo(x1, y1);
+                                        this.canvasContext.lineTo(x2, y2);
+                                        this.canvasContext.lineWidth = 2.0;
+                                        this.canvasContext.strokeStyle = color;
+                                        this.canvasContext.stroke();
+                                        this.canvasContext.closePath();
+                                };
+
+
+                                // method: clearGraph
+                                // erases the graph
+                                this.clearGraph = function () {
+                                        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                                };
+
+                                return this;
+                        }
+                }
+
+                // this function will get called when the calc button gets clicked
+                function onCalc() {
+                        // retrieve values from the input boxes and store in variables
+                        var height_text = document.getElementById("height").value;
+                        var height = new Number(height_text);
+                        var length_text = document.getElementById("length").value;
+                        if (length_text == "")
+                                length = autoCalcLength(height);
+                        else
+                                length = new Number(length_text);
+
+                        drawPic(height, length);
+                        showTextResults(height, length);
+                }
+
+                function autoCalcLength(height) {
+                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
+                        return height * 2;
+                }
+
+                function drawPic(height, length) {
+                        kmgHelper = new kmGraphHelper("graph");
+                        kmgHelper.clearGraph();
+
+                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
+                        var nSteps = 5;
+                        var x = 0;
+                        var y = 0;
+                        var riser = 5;
+                        var tread = 10;
+
+                        var red = "#ff0000";
+                        var blue = "#0000ff";
+                        var scale = 2.0;
+
+
+                        for (var step = 0; step < nSteps; step++) {
+                                var x1 = x + tread * scale;
+                                kmgHelper.drawLine(x, y, x1, y, red);
+
+                                var y1 = y + riser * scale;
+                                kmgHelper.drawLine(x1, y, x1, y1, blue);
+
+                                x = x1;
+                                y = y1;
+                        }
+                }
+
+                function showTextResults(height, length) {
+                        // *** bogus numbers for demonstration purposes, need to rewrite correctly! ***
+                        var numSteps = 0;
+                        var riserHeight = 0;
+                        var treadDepth = 0;
+
+                        var tr = "stairs height: " + height + "\r\n" +
+                                "stairs length: " + length + "\r\n" +
+                                "number steps:  " + numSteps + "\r\n" +
+                                "riser height:  " + riserHeight + "\r\n" +
+                                "tread depth:   " + treadDepth + "\r\n";
+                        document.getElementById("text_results").value = tr;
+                }
+        </script>
+</head>
+
+
+<body>
+
+        height of stairs(inches)<br>
+        <input id="height" value="60" size="4" /><br>
+        <br>
+        horizontal length of stairs (inches, leave blank to automatically calculate)<br>
+        <input id="length" value="" size="4" /><br>
+        <br>
+        <button onclick="onCalc()">calculate</button>
+        <br>
+        <br>
+
+
+        <canvas id="graph" width="400" height="200" style="border-style:solid;border-width:1px"></canvas>
+
+        <textarea id="text_results" rows="10" cols="60"></textarea>
+
+</body>
+
+</html>
