@@ -4,19 +4,15 @@
 
 <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">      
-        <title>test project</title>
-        <style>
-                #text_results {
-                        white-space: pre-wrap;
-                        padding-bottom: 162px; /*creates spacing before results are output*/
-                }
-        </style>
+        <title>Stair Calculator</title>
+        <link rel="stylesheet" href="styleSecondDraft.css">
+
         <script type="text/javascript">
                 "use strict";
 
                 //error code
                 /*//console.log("before error");
-                //document.getElementById("text_results").innerHTML = "NOOOOOOOOOOOOO";
+                //document.getElementById("text-results").innerHTML = "NOOOOOOOOOOOOO";
                 alert("Please enter a valid input"); //alert the user of an improper input
                 throw new Error("error : nonono"); //stops the code, puts weird errors in the console, but they don't seem to affect performance (?)
                 //console.log("after error");*/
@@ -24,7 +20,6 @@
                 const fractionStrings = ["0", "1/32", "1/16", "3/32", "1/8", '5/32', '3/16', '7/32', '1/4', '9/32', '5/16', '11/32', '3/8', '13/32', '7/16', '15/32', '1/2', '17/32', '9/16', '19/32', '5/8', '21/32', '11/16', '23/32', '3/4', '25/32', '13/16', '27/32', '7/8', '29/32', '15/16', '31/32', '1'];
                 const niceFractions = [0, 0.03125, 0.0625, 0.09375, 0.125, 0.15625, 0.1875, 0.21875, 0.25, 0.28125, 0.3125, 0.34375, 0.375, 0.40625, 0.4375, 0.46875, 0.5, 0.53125, 0.5625, 0.59375, 0.625, 0.65625, 0.6875, 0.71875, 0.75, 0.78125, 0.8125, 0.84375, 0.875, 0.90625, 0.9375, 0.96875, 1];
 
-                //const decimalValues = [];
 
                 class kmGraphHelper {
                         constructor(id) {
@@ -124,7 +119,7 @@
                                 alertText = 'Invalid inputs: ' + alertText
                                 alert(alertText);
                         }
-                        document.getElementById("code_warning").innerHTML = alertText;
+                        document.getElementById("code-warning").innerHTML = alertText;
 
                 }
 
@@ -222,7 +217,7 @@
                 }
 
                 //finds the closest fraction on a ruler down to the 32nds 
-                function findClosestNiceFraction(badFraction) {
+                function findClosestNiceFraction(badFraction, roundUp) {
                         let temp = 1;
                         //console.log("raw fraction is " + badFraction);
 
@@ -242,47 +237,74 @@
                         var riserHeight = height/numSteps;
                         var treadDepth = length/numSteps;
                         var numStringers = Math.trunc(width/18) + 2;
-                        var stringerDistance = width/(numStringers-1);
+                        var stringerWidthDistance = width/(numStringers-1);
+                        
                         var stringerLength = Math.sqrt(height**2 + length**2);
+                        const integerStringerLength = Math.floor(stringerLength);
+                        const stringerLengthDecimal = stringerLength % 1;
+                        let niceFraction = findClosestNiceFraction(stringerLengthDecimal);
+                        let difference = stringerLengthDecimal-niceFraction;
+                        let sFraction = fractionStrings[niceFractions.indexOf(niceFraction)];
+                        
+                        /*let indexChanger = 0;
+                        if(niceFractions.indexOf(niceFraction) % 2 == 1 ) {
+                                indexChanger = 1;
+                        } */
+                        
                         const integerRiserHeight = Math.floor(riserHeight);
-                        const rRiserFraction = riserHeight % 1;
-                        const niceFraction = findClosestNiceFraction(rRiserFraction);
-                        const difference = rRiserFraction-niceFraction;
-                        const totDifference = Math.trunc((difference*numSteps)*10000000000)/10000000000;
-                        const totDifFraction = fractionStrings[niceFractions.indexOf(Math.abs(totDifference))];
-                        const fraction = fractionStrings[niceFractions.indexOf(niceFraction)];
 
-                        console.log("int rh: " + integerRiserHeight)
+                        const rRiserFraction = riserHeight % 1;
+                        niceFraction = findClosestNiceFraction(rRiserFraction);
+                        difference = rRiserFraction-niceFraction;
+                        const totDifference = Math.trunc((difference*numSteps)*10000000000)/10000000000;//gets rid of tiny random decimals
+                        const totDifFraction = fractionStrings[niceFractions.indexOf(Math.abs(totDifference))];
+                        let rFraction = fractionStrings[niceFractions.indexOf(niceFraction)];
+
+                        if (rFraction == 0) {
+                                rFraction = "";
+                        }
+                        else {
+                                rFraction = " " + rFraction;
+                        }
+                        if (sFraction == 0) {
+                                sFraction = "";
+                        }
+                        else {
+                                sFraction = " " + sFraction;
+                        }
+
+                        /*console.log("int rh: " + integerRiserHeight)
                         console.log("riser fraction: " + rRiserFraction)
                         console.log("niceFraction: " + niceFraction)
                         console.log("difference: " + difference)
                         console.log("totDifference: " + totDifference)
                         console.log("totDif Fraction: " + totDifFraction)
-                        console.log(integerRiserHeight + " " + fraction)
+                        console.log(integerRiserHeight + " " + rFraction)*/
                         var alertText = "";
                         if(width == '') {
                                 width = "N/A"
                                 numStringers = "N/A"
-                                stringerDistance = "N/A"
+                                stringerWidthDistance = "N/A"
                         }
 
-                        var tr ="stairs height:  " + height +
-                                "\nstairs length:  " + length +
-                                "\ndistance between stringers: " + stringerDistance +
-                                "\nnumber steps:   " + numSteps +
-                                //"\nriser height:   " + riserHeight +
-                                "\nriser height:   " + integerRiserHeight + "\' " + fraction + "\"" +
-                                "\ntread depth:    " + treadDepth + 
-                                "\nstringer length " + stringerLength +
-                                "\nstairs width:   " + width +
-                                "\n# of stringers: " + numStringers;
-                        document.getElementById("text_results").innerHTML = "Results:\n" + tr;
-                        document.getElementById("text_results").style.paddingBottom = "0px";
-                        //document.getElementById("code_warning").innerHTML = "BLAH"; //one option for putting text in div
+                        var tr ="Stairs height:  " + height +
+                                "\nStairs length:  " + length +
+                                "\nDistance between stringers: " + stringerWidthDistance +
+                                "\nNumber steps:   " + numSteps +
+                                "\nRiser height:   " + integerRiserHeight + rFraction +
+                                "\"\nTread depth:    " + treadDepth + 
+                                "\nStringer length: " + integerStringerLength + sFraction +
+                                "\"\nStairs width:   " + width +
+                                "\nNumber of stringers: " + numStringers;
+                        document.getElementById("text-results").innerHTML =tr;
+                        document.getElementById("text-results").style.paddingBottom = "0px";
+                        //document.getElementById("code-warning").innerHTML = "BLAH"; //one option for putting text in div
                         checkValues(riserHeight, treadDepth, height, width, numSteps, alertText);
                         //alert(alertText);
                         //document.getElementById("graph").width = 4000;
                 }
+
+                drawPic()
 
         </script>
 </head>
@@ -290,32 +312,59 @@
 
 
 
-<body>
+<body onload="drawPic(60, 99, 9)">
+        <header>
+                <h1 id="title">Stair Calculator</h1>
+        </header>
+        <div id="margin-maker">
+                <header id="instructions">
+                        <h1 class="less-bot-padding">Instructions:</h1>
+                        <p>Fill out the boxes and press calculate to get measurements and see a scaled representation of your proposed stairs.</p>
+                </header>
+        
+                <main>
+        
+                        <section id="visual">
+                                <h4>Visual:</h4>
+                                <canvas id="graph" width="465" height="318"></canvas>
+                        </section>
+
+                        
+
+                        Height of stairs (4 to 144 inches).<br>
+                        <input id="height" value="60" size="4" /><br>
+                        <br>
+
+                        Horizontal length of stairs (minimum 10 inches per step, leave blank to automatically calculate).<br>
+                        <input id="length" value="" size="4" /><br>
+                        <br>
+
+                        Width of stairs (at least 36 inches).<br>
+                        <input id="width" value="48" size="4" /><br>
+                        <br>
+
+                        <button onclick="onCalc()">CALCULATE</button>
+                        <br>
+                        <br>
 
 
-        height of stairs(4 to 144 inches)<br>
-        <input id="height" value="60" size="4" /><br>
-        <br>
-        horizontal length of stairs (minimum 10 inches per step, leave blank to automatically calculate)<br>
-        <input id="length" value="" size="4" /><br>
-        <br>
-        width of stairs (at least 36 inches)<br>
-        <input id="width" value="" size="4" /><br>
-        <br>
-        <button onclick="onCalc()">calculate</button>
-        <br>
-        <br>
+                        <div id="code-warning"> </div>
+                        <h3>Results (inches):</h3>
+                        <div id="text-results">Stairs height: 
+Stairs length:
+Distance between stringers:
+Number steps:
+Riser height:
+Tread depth:
+Stringer length:
+Stairs width:
+Number of stringers:</div>
+                </main>
+        </div>
 
-
-
-
-        <canvas id="graph" width="465" height="318" style="border-style:solid;border-width:1px"></canvas>
-
-        <div id="code_warning" style="font-weight:bold; color: crimson;"></div>
-        <div id="text_results">Results</div>
-        <!-- <textarea id="text_results" rows="10" cols="60" font="strong"></textarea> -->
-        <p>For more specific building requirements, please refer to the <a href="https://codes.iccsafe.org/content/IBC2021P2/chapter-10-means-of-egress#IBC2021P2_Ch10_Sec1011">International Building Code</a> (section 1011)</p>
-
+        <footer>
+                <p>For more specific building requirements, please refer to the <a href="https://codes.iccsafe.org/content/IBC2021P2/chapter-10-means-of-egress#IBC2021P2_Ch10_Sec1011">International Building Code</a> (section 1011)</p>
+        </footer>
 
 </body>
 

@@ -1,0 +1,50 @@
+body {
+    margin:0px;
+    background-color:#bfd6db;
+}
+
+h3 {
+    text-align:center;
+}
+
+header {
+    padding:10px;
+    background-color:rgb(247, 175, 175);
+    text-align:center;
+}
+
+.less-bot-padding {
+    padding-bottom:0px;
+}
+
+#title {
+    font-size:50px;
+}
+
+#instructions {
+    background-color:#bfd6db;
+}
+
+#margin-maker {
+    margin:5px;
+}
+
+#text-results {
+    white-space: pre-wrap;
+    /*padding-bottom: 162px; /*creates spacing before results are output*/
+}
+
+#code-warning {
+    font-weight:bold; 
+    color: red;
+}
+
+#visual {
+    float:right;
+    width:50%;
+}
+
+#graph {
+    border-style:hidden;
+    border-width:1px
+}
