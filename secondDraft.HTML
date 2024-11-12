@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">      
         <title>Stair Calculator</title>
         <link rel="stylesheet" href="styleSecondDraft.css">
+        <link rel="icon" type="image/x-icon" href="favicon.ico?v1">
 
         <script type="text/javascript">
                 "use strict";
@@ -142,7 +143,7 @@
                         document.getElementById("graph").height = 318;
                         //document.getElementById("graph").height = height + 10; //bug, keeping this here so I remember it
 
-                        var x = 0;
+                        var x = 10;
                         var y = 10;
                         var riser = height/nSteps;
                         var tread = length/nSteps;
@@ -170,6 +171,7 @@
 
                         kmgHelper.clearGraph();
 
+                        kmgHelper.drawRect(x-10, y, 15, riser*scale*nSteps + 1, "#C4A484");
 
                         for (var step = 0; step < nSteps; step++) {
                                 var x1 = x + tread * scale;
@@ -316,10 +318,11 @@
         <header>
                 <h1 id="title">Stair Calculator</h1>
         </header>
-        <div id="margin-maker">
+<div id="margin-maker">
                 <header id="instructions">
                         <h1 class="less-bot-padding">Instructions:</h1>
-                        <p>Fill out the boxes and press calculate to get measurements and see a scaled representation of your proposed stairs.</p>
+                        <p>Fill out the boxes and press calculate to get measurements and see a scaled representation of your proposed stairs. Stair jargon: Stringers</p>
+                        <p><em>***This calculator is only made for stairs 12 feet tall or less. Any more than that requires a landing, as per section 1011.8 of the IBC. Please visit </em><a href="https://www.stair-treads.com/landings-in-the-staircase?srsltid=AfmBOopYQfQYMEklyOFLgs7leC8sHHfEekXnmPQKkW1wkfuuURciJEWG">this link</a><em> for more information on landings.***</em></p>
                 </header>
         
                 <main>
@@ -331,15 +334,15 @@
 
                         
 
-                        Height of stairs (4 to 144 inches).<br>
+                        Total Height of Stairs (4 to 144 inches).<br>
                         <input id="height" value="60" size="4" /><br>
                         <br>
 
-                        Horizontal length of stairs (minimum 10 inches per step, leave blank to automatically calculate).<br>
+                        Horizontal Length of Stairs (minimum 10 inches per step, leave blank to automatically calculate).<br>
                         <input id="length" value="" size="4" /><br>
                         <br>
 
-                        Width of stairs (at least 36 inches).<br>
+                        Width of Stairs (at least 36 inches).<br>
                         <input id="width" value="48" size="4" /><br>
                         <br>
 
@@ -360,12 +363,12 @@ Stringer length:
 Stairs width:
 Number of stringers:</div>
                 </main>
-        </div>
+        
 
         <footer>
                 <p>For more specific building requirements, please refer to the <a href="https://codes.iccsafe.org/content/IBC2021P2/chapter-10-means-of-egress#IBC2021P2_Ch10_Sec1011">International Building Code</a> (section 1011)</p>
         </footer>
-
+</div>
 </body>
 
 
