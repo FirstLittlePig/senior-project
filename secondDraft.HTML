@@ -140,17 +140,18 @@
 
                 function drawPic(height, length, nSteps) {
                         let kmgHelper = new kmGraphHelper("graph");// variable kmgHelper needed to be declared
+                        //console.log("before resetter height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
                         document.getElementById("graph").height = 318;
                         //document.getElementById("graph").height = height + 10; //bug, keeping this here so I remember it
 
-                        var x = 10;
+                        var x = 0;
                         var y = 10;
                         var riser = height/nSteps;
                         var tread = length/nSteps;
                         /*if (tread < 10) { tread = 10; }*/
-
+                        //console.log("after resetter height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
                         //nSteps*riser
-                        var scale = kmgHelper.getHeight/(height);//35*(1/nSteps)
+                        var scale = kmgHelper.getHeight/(height);
                         /*if (kmgHelper.getWidth/length > kmgHelper.getHeight/height) {
                                 scale = kmgHelper.getHeight/height;
                                 console.log("scale (length) |" + scale + "|");
@@ -161,32 +162,39 @@
                         }*/
                         if(length*scale>kmgHelper.getWidth || length*scale<kmgHelper.getWidth) {
                                 scale = 450/(length);
-                                if(height*scale<250) {
+                                /*if(height*scale<250) {
                                         document.getElementById("graph").height = height * scale + 15;
-                                }
+                                }*/ //BUG changed height of graph, which only served to mess things up
                                 if(height*scale>318) {
-                                        scale=kmgHelper.getHeight/(height*1+1);
+                                        scale=kmgHelper.getHeight/(height*1+1); //keeps the graph from going out the bottom
                                 }
                         }
+
+                        //console.log("after if statement height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
 
                         kmgHelper.clearGraph();
 
-                        kmgHelper.drawRect(x-10, y, 15, riser*scale*nSteps + 1, "#C4A484");
+                        //kmgHelper.drawRect(x-10, y, 15, riser*scale*nSteps + 1, "#C4A484");
+
+                        //console.log("after clearGraph height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
 
                         for (var step = 0; step < nSteps; step++) {
                                 var x1 = x + tread * scale;
-                                kmgHelper.drawLine(x, y, x1, y, "red");
-
-
                                 var y1 = y + riser * scale;
-                                kmgHelper.drawLine(x1, y, x1, y1, "blue");
 
+                                kmgHelper.drawRect(x, y, x1-x, kmgHelper.getHeight-y, "#C4A484");
+                                kmgHelper.drawLine(x1, y, x1, y1, "blue");
+                                kmgHelper.drawLine(x, y, x1, y, "red");
 
                                 x = x1;
                                 y = y1;
+                                //console.log("in loop height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
                         }
+                        //console.log("before drawRect height |" + kmgHelper.getHeight + "| width |" + kmgHelper.getWidth + "|")
+                        kmgHelper.drawRect(0, y, x, kmgHelper.getHeight-y, "#558BAA");
+
                         
-                        kmgHelper.drawRect(0, y, kmgHelper.getWidth, 15, "#C4A484");//light brown
+                        //kmgHelper.drawRect(0, y, kmgHelper.getWidth, 15, "#C4A484");//light brown
 
                         //kmgHelper.drawLine(0, y, kmgHelper.getWidth, y, blue);
                         //document.getElementById('graph').width = x;
@@ -328,7 +336,7 @@
                 <main>
         
                         <section id="visual">
-                                <h4>Visual:</h4>
+                                <h4>Visual (Red = treads, blue = risers):</h4>
                                 <canvas id="graph" width="465" height="318"></canvas>
                         </section>
 

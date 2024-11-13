@@ -1,6 +1,6 @@
 body {
     margin:0px;
-    background-color:#bfd6db;
+    background-color:#558BAA;
 }
 
 h3 {
@@ -9,15 +9,17 @@ h3 {
 
 header {
     padding:10px;
-    background-color:rgb(247, 175, 175);
+    background-color:#77523c;
     text-align:center;
+    color:white;
+    
 }
 
 button {
     width:300px;
     height:100px;
     font-size:35px;
-    background-color:rgb(181, 189, 111);
+    background-color:#8BAA55;
 }
 
 .less-bot-padding {
@@ -29,11 +31,12 @@ button {
 }
 
 #instructions {
-    background-color:#bfd6db;
+    background-color:#558BAA;
 }
 
 #margin-maker {
     margin:8px;
+    color:white;
 }
 
 #text-results {
