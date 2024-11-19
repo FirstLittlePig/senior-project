@@ -246,13 +246,21 @@
                 function showTextResults(height, length, width, numSteps) {
                         var riserHeight = height/numSteps;
                         var treadDepth = length/numSteps;
+                        const treadDecimal = treadDepth % 1;
+                        const integerTreadDepth = Math.floor(treadDepth);
+                        let niceFraction = findClosestNiceFraction(treadDecimal);
+                        let tFraction = "\"";
+                        if (length == document.getElementById("length").value) {//if using the length text, not an autoCalc value
+                                tFraction = " " + fractionStrings[niceFractions.indexOf(niceFraction)] + "\"";
+                        }
+
                         var numStringers = Math.trunc(width/18) + 2;
-                        var stringerWidthDistance = width/(numStringers-1);
+                        var stringerWidthDistance = width/(numStringers-1) + "\"";
                         
                         var stringerLength = Math.sqrt(height**2 + length**2);
                         const integerStringerLength = Math.floor(stringerLength);
                         const stringerLengthDecimal = stringerLength % 1;
-                        let niceFraction = findClosestNiceFraction(stringerLengthDecimal);
+                        niceFraction = findClosestNiceFraction(stringerLengthDecimal);
                         let difference = stringerLengthDecimal-niceFraction;
                         let sFraction = fractionStrings[niceFractions.indexOf(niceFraction)];
                         
@@ -297,15 +305,13 @@
                                 stringerWidthDistance = "N/A"
                         }
 
-                        var tr ="Stairs height:  " + height +
-                                "\nStairs length:  " + length +
-                                "\nDistance between stringers: " + stringerWidthDistance +
-                                "\nNumber steps:   " + numSteps +
-                                "\nRiser height:   " + integerRiserHeight + rFraction +
-                                "\"\nTread depth:    " + treadDepth + 
+                        var tr ="\nTotal stairs length:  " + length +
+                                "\"\nNumber of steps:   " + numSteps +
+                                "\"\nRiser height:   " + integerRiserHeight + rFraction +
+                                "\"\nTread depth:    " + integerTreadDepth + tFraction +
                                 "\nStringer length: " + integerStringerLength + sFraction +
-                                "\"\nStairs width:   " + width +
-                                "\nNumber of stringers: " + numStringers;
+                                "\"\nNumber of stringers: " + numStringers +
+                                "\nDistance between stringers: " + stringerWidthDistance;
                         document.getElementById("text-results").innerHTML =tr;
                         document.getElementById("text-results").style.paddingBottom = "0px";
                         //document.getElementById("code-warning").innerHTML = "BLAH"; //one option for putting text in div
@@ -329,7 +335,7 @@
 <div id="margin-maker">
                 <header id="instructions">
                         <h1 class="less-bot-padding">Instructions:</h1>
-                        <p>Fill out the boxes and press calculate to get measurements and see a scaled representation of your proposed stairs. Stair jargon: Stringers</p>
+                        <p>Fill out the boxes and press calculate to get measurements and see a scaled representation of your proposed stairs.</p>
                         <p><em>***This calculator is only made for stairs 12 feet tall or less. Any more than that requires a landing, as per section 1011.8 of the IBC. Please visit </em><a href="https://www.stair-treads.com/landings-in-the-staircase?srsltid=AfmBOopYQfQYMEklyOFLgs7leC8sHHfEekXnmPQKkW1wkfuuURciJEWG">this link</a><em> for more information on landings.***</em></p>
                 </header>
         
@@ -361,15 +367,23 @@
 
                         <div id="code-warning"> </div>
                         <h3>Results (inches):</h3>
-                        <div id="text-results">Stairs height: 
-Stairs length:
-Distance between stringers:
-Number steps:
+                        <div id="text-results">
+Total stairs length:
+Number of steps:
 Riser height:
 Tread depth:
 Stringer length:
-Stairs width:
-Number of stringers:</div>
+Number of stringers:
+Distance between stringers:</div>
+                                <br>
+                        <details>
+                                <summary>Click here for an explanation of stair terminology</summary>
+                                <p>
+                                        <em>Riser:</em> the vertical board on each step (blue in the visual)<br>
+                                        <em>Tread:</em> the horizontal board on each step (red in the visual)<br>
+                                        <em>Stringer:</em> a diagonal 2x12 board that holds the weight of the stairs
+                                </p>
+                        </details>
                 </main>
         
 
