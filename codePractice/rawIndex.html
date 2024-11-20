@@ -21,6 +21,8 @@
                                 this.canvasContext = this.canvas.getContext("2d");
                                 this.getHeight = document.getElementById(id).height;
                                 this.getWidth = document.getElementById(id).width;
+                                //console.log(this.getHeight + " " + this.getWidth)
+
 
 
 
@@ -30,6 +32,7 @@
                                         this.canvasContext.fillStyle = color;
                                         this.canvasContext.fillRect(x, y, w, h);
                                 };
+
 
 
 
@@ -47,15 +50,18 @@
 
 
 
+
                                 // method: clearGraph
                                 // erases the graph
                                 this.clearGraph = function () {
                                         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
                                 };
 
+
                                 return this;
                         }
                 }
+
 
                 // this function will get called when the calc button gets clicked
                 function onCalc() {
@@ -73,6 +79,13 @@
                                 length = new Number(length_text);
                         }
                         var width = document.getElementById("width").value;
+                        
+                        /*let testNumSteps = 1;
+                        for (let testHeight = 4; testHeight < 144; testHeight++) {
+                                testNumSteps = Math.ceil(testHeight/7);
+                                //console.log("\nTESTING HEIGHT = |" + testHeight + "|    NUMBER OF STEPS |" + testNumSteps + "|");
+                                tester(testHeight, length, width, testNumSteps);
+                        }*/
 
                         drawPic(height, length, numberOfSteps);
                         showTextResults(height, length, width, numberOfSteps);
@@ -103,10 +116,24 @@
 
                 }
 
+                /*function checkHeight() {
+
+                }
+
+                function checkLength() {
+
+                }
+                
+                function checkWidth() {
+
+                }*/
+
+
 
                 function drawPic(height, length, nSteps) {
                         let kmgHelper = new kmGraphHelper("graph");// variable kmgHelper needed to be declared
                         document.getElementById("graph").height = 318;
+                        //document.getElementById("graph").height = height + 10; //bug, keeping this here so I remember it
 
                         var x = 0;
                         var y = 10;
@@ -116,12 +143,13 @@
                         var scale = kmgHelper.getHeight/(height);
 
                         if(length*scale>kmgHelper.getWidth || length*scale<kmgHelper.getWidth) {
-                                
-                            scale = 450/(length);
-
-                            if(height*scale>318) {
-                                scale=kmgHelper.getHeight/(height*1+1); //keeps the graph from going out the bottom
-                            }
+                                scale = 450/(length);
+                                /*if(height*scale<250) {
+                                        document.getElementById("graph").height = height * scale + 15;
+                                }*/ //BUG changed height of graph, which only served to mess things up
+                                if(height*scale>318) {
+                                        scale=kmgHelper.getHeight/(height*1+1); //keeps the graph from going out the bottom
+                                }
                         }
 
                         kmgHelper.clearGraph();
@@ -145,40 +173,44 @@
 
                 function autoCalcLength(height, nSteps) {
                         var autoLength = nSteps * 11 // 10 is the minimum for steps
+                        /*if ((autoLength/nSteps)<10) { 
+                                return nSteps*10;
+                                }*/
                         return autoLength;
                 }
 
 
                 
-                /*function tester(totHeight, totLength, totWidth, numSteps) {
+                function tester(totHeight, totLength, totWidth, numSteps) {
                         const rRiserHeight = totHeight/numSteps;
                         const rRiserFraction = rRiserHeight % 1;
-                        
+                        //console.log("raw riser height " + rRiserHeight);
                         if(rRiserHeight>7) {
                                 console.log("riser height is too big: " + rRiserHeight)
                         }
-                        
                         const niceFraction = findClosestNiceFraction(rRiserFraction);
                         const difference = rRiserFraction-niceFraction;
                         const totDifference = difference*numSteps;
-                        
+                        //console.log("The difference between raw fraction and estimation: " + totDifference);
                         if(totDifference<-3/8) {
                                 console.log("Difference is too big: " + totDifference);
                         }
-                }*/
+                }
 
                 //finds the closest fraction on a ruler down to the 32nds 
                 function findClosestNiceFraction(badFraction, roundUp) {
                         let temp = 1;
+                        //console.log("raw fraction is " + badFraction);
 
                         for(let i = 0; i < niceFractions.length; i++) {
-                                
-                            if(Math.abs(badFraction-niceFractions[i]) < temp) {
-                                temp=Math.abs(badFraction-niceFractions[i]);
-                            }
-                            else {
-                                return niceFractions[i-1];
-                            }
+                                //console.log("    checking " + niceFractions[i]);
+                                if(Math.abs(badFraction-niceFractions[i]) < temp) {
+                                        temp=Math.abs(badFraction-niceFractions[i]);
+                                }
+                                else {
+                                        //console.log("the closest one is " + niceFractions[i-1]);
+                                        return niceFractions[i-1];
+                                }
                         }
                 }
 
@@ -210,11 +242,19 @@
                         niceFraction = findClosestNiceFraction(stringerLengthDecimal);
                         let difference = stringerLengthDecimal-niceFraction;
                         let sFraction = fractionStrings[niceFractions.indexOf(niceFraction)];
-                                                
+                        
+                        /*let indexChanger = 0;
+                        if(niceFractions.indexOf(niceFraction) % 2 == 1 ) {
+                                indexChanger = 1;
+                        } */
+                        
                         const integerRiserHeight = Math.floor(riserHeight);
 
                         const rRiserFraction = riserHeight % 1;
                         niceFraction = findClosestNiceFraction(rRiserFraction);
+                        /*difference = rRiserFraction-niceFraction;
+                        const totDifference = Math.trunc((difference*numSteps)*10000000000)/10000000000;//gets rid of tiny random decimals
+                        const totDifFraction = fractionStrings[niceFractions.indexOf(Math.abs(totDifference))];*/
                         let rFraction = fractionStrings[niceFractions.indexOf(niceFraction)];
 
                         if (rFraction == 0) {
@@ -230,6 +270,13 @@
                                 sFraction = " " + sFraction;
                         }
 
+                        /*console.log("int rh: " + integerRiserHeight)
+                        console.log("riser fraction: " + rRiserFraction)
+                        console.log("niceFraction: " + niceFraction)
+                        console.log("difference: " + difference)
+                        console.log("totDifference: " + totDifference)
+                        console.log("totDif Fraction: " + totDifFraction)
+                        console.log(integerRiserHeight + " " + rFraction)*/
                         var alertText = "";
                         if(width == '') {
                                 width = "N/A";
@@ -245,11 +292,12 @@
                                 "\nStringer length: " + integerStringerLength + sFraction +
                                 "\"\nNumber of stringers: " + numStringers +
                                 "\nDistance between stringers: " + integerStringerWidthDistance + swFraction;
-                        
                         document.getElementById("text-results").innerHTML =tr;
                         document.getElementById("text-results").style.paddingBottom = "0px";
-                        
+                        //document.getElementById("code-warning").innerHTML = "BLAH"; //one option for putting text in div
                         checkValues(riserHeight, treadDepth, height, width, numSteps, alertText);
+                        //alert(alertText);
+                        //document.getElementById("graph").width = 4000;
                 }
 
                 drawPic()

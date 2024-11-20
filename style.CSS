@@ -60,3 +60,9 @@ button {
     border-style:hidden;
     border-width:1px
 }
+
+#copyright {
+    text-align:center;
+    font-size:15px;
+    color:rgb(248, 196, 147);
+}
